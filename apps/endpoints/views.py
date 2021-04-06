@@ -20,14 +20,14 @@ class EndpointViewSet(
     mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
 ):
     serializer_class = EndpointSerializer
-    qs = Endpoint.objects.all()
+    queryset = Endpoint.objects.all()
 
 
 class MLAlgorithmViewSet(
     mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
 ):
     serializer_class = MLAlgorithmSerializer
-    qs = MachineLearningAlgorithm.objects.all()
+    queryset = MachineLearningAlgorithm.objects.all()
 
 
 def deactivate_old_statuses(instance):
