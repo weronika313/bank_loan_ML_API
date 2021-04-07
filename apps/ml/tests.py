@@ -1,6 +1,9 @@
+import inspect
+
 from django.test import TestCase
 
 from apps.ml.income_classifier.random_forest import RandomForestClassifier
+from apps.ml.registry import MLRegistry
 
 class MLTests(TestCase):
     def test_rf_algorithm(self):
@@ -22,3 +25,22 @@ class MLTests(TestCase):
         self.assertEqual('OK', response['status'])
         self.assertTrue('label' in response)
         self.assertEqual('Approved', response['label'])
+
+    def test_registry(self):
+        registry = MLRegistry()
+        self.assertEqual(len(registry.endpoints), 0)
+        endpoint_name = "income_classifier"
+        algorithm_object = RandomForestClassifier()
+        algorithm_name = "random forest"
+        algorithm_status = "production"
+        algorithm_version = "v1"
+        algorithm_description = "A random forest is a meta estimator that fits a number of decision tree classifiers " \
+                                "on various sub-samples of the dataset and uses averaging to improve the predictive " \
+                                "accuracy and control over-fitting. "
+        algorithm_code = inspect.getsource(RandomForestClassifier)
+        # add to registry
+        registry.add_algorithm(endpoint_name, algorithm_object, algorithm_name,
+                               algorithm_status, algorithm_version,
+                               algorithm_description, algorithm_code)
+        # there should be one endpoint available
+        self.assertEqual(len(registry.endpoints), 1)
