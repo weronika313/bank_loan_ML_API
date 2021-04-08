@@ -16,13 +16,24 @@ class MLAlgorithmSerializer(serializers.ModelSerializer):
     current_status = serializers.SerializerMethodField(read_only=True)
 
     def get_current_status(self, algorithm):
-        return MLAlgorithmStatus.objects.filter(parent_algorithm=algorithm).latest('created_at').status
+        return (
+            MLAlgorithmStatus.objects.filter(parent_algorithm=algorithm)
+            .latest("created_at")
+            .status
+        )
 
     class Meta:
         model = MachineLearningAlgorithm
-        read_only_fields = ("id", "name", "description", "code",
-                            "version", "created_at",
-                            "parent_endpoint", "current_status")
+        read_only_fields = (
+            "id",
+            "name",
+            "description",
+            "code",
+            "version",
+            "created_at",
+            "parent_endpoint",
+            "current_status",
+        )
         fields = read_only_fields
 
 
@@ -30,8 +41,7 @@ class MLAlgorithmStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = MLAlgorithmStatus
         read_only_fields = ("id", "active")
-        fields = ("id", "active", "status", "created_at",
-                  "parent_algorithm")
+        fields = ("id", "active", "status", "created_at", "parent_algorithm")
 
 
 class MLRequestSerializer(serializers.ModelSerializer):
@@ -45,7 +55,7 @@ class MLRequestSerializer(serializers.ModelSerializer):
             "created_at",
             "parent_algorithm",
         )
-        fields =  (
+        fields = (
             "id",
             "input_data",
             "full_response",

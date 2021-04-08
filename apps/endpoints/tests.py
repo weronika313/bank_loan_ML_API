@@ -16,11 +16,11 @@ class EndpointTests(TestCase):
             "LoanAmount": 120,
             "Loan_Amount_Term": 360,
             "Credit_History": 1,
-            "Property_Area": "Urban"
+            "Property_Area": "Urban",
         }
 
         classifier_url = "/api/v1/random_forest_classifier_alg/predict"
-        response = client.post(classifier_url, input_data, format='json')
+        response = client.post(classifier_url, input_data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["label"], "Approved")
         self.assertTrue("request_id" in response.data)

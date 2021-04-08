@@ -19,7 +19,9 @@ class MLAlgorithmStatus(models.Model):
     status = models.CharField(max_length=128)
     active = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
-    parent_algorithm = models.ForeignKey(MachineLearningAlgorithm, on_delete=models.CASCADE, related_name="status")
+    parent_algorithm = models.ForeignKey(
+        MachineLearningAlgorithm, on_delete=models.CASCADE, related_name="status"
+    )
 
 
 class MLRequest(models.Model):
@@ -28,6 +30,6 @@ class MLRequest(models.Model):
     response = models.CharField(max_length=10000)
     feedback = models.CharField(max_length=10000, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
-    parent_algorithm = models.ForeignKey(MachineLearningAlgorithm, on_delete=models.CASCADE)
-
-
+    parent_algorithm = models.ForeignKey(
+        MachineLearningAlgorithm, on_delete=models.CASCADE
+    )

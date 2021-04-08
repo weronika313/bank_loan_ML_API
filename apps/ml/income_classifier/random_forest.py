@@ -19,7 +19,13 @@ class RandomForestClassifier:
         return input_data
 
     def ohe_values(self, input_data):
-        cat_columns = ['Gender', 'Married', 'Education', 'Self_Employed', 'Property_Area']
+        cat_columns = [
+            "Gender",
+            "Married",
+            "Education",
+            "Self_Employed",
+            "Property_Area",
+        ]
         df_processed = pd.get_dummies(input_data, columns=cat_columns)
         new_dict = {}
 

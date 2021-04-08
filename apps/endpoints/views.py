@@ -37,17 +37,21 @@ class MLAlgorithmViewSet(
 
 
 def deactivate_old_statuses(instance):
-    old_statuses = MLAlgorithmStatus.objects.filter(parent_mlalgorithm=instance.parent_mlalgorithm,
-                                                    created_at__lt=instance.created_at,
-                                                    active=True)
+    old_statuses = MLAlgorithmStatus.objects.filter(
+        parent_mlalgorithm=instance.parent_mlalgorithm,
+        created_at__lt=instance.created_at,
+        active=True,
+    )
     for i in range(len(old_statuses)):
         old_statuses[i].active = False
     MLAlgorithmStatus.objects.bulk_update(old_statuses, ["active"])
 
 
 class MLAlgorithmStatusViewSet(
-    mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet,
-    mixins.CreateModelMixin
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+    mixins.CreateModelMixin,
 ):
     serializer_class = MLAlgorithmStatusSerializer
     queryset = MLAlgorithmStatus.objects.all()
@@ -63,8 +67,10 @@ class MLAlgorithmStatusViewSet(
 
 
 class MLRequestViewSet(
-    mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet,
-    mixins.UpdateModelMixin
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+    mixins.UpdateModelMixin,
 ):
     serializer_class = MLRequestSerializer
     queryset = MLRequest.objects.all()
@@ -76,8 +82,11 @@ class PredictView(views.APIView):
         algorithm_status = self.request.query_params.get("status", "production")
         algorithm_version = self.request.query_params.get("version")
 
-        algs = MachineLearningAlgorithm.objects.filter(parent_endpoint__name=endpoint_name, status__status=algorithm_status,
-                                          status__active=True)
+        algs = MachineLearningAlgorithm.objects.filter(
+            parent_endpoint__name=endpoint_name,
+            status__status=algorithm_status,
+            status__active=True,
+        )
 
         if algorithm_version is not None:
             algs = algs.filter(version=algorithm_version)
@@ -89,8 +98,10 @@ class PredictView(views.APIView):
             )
         if len(algs) != 1 and algorithm_status != "ab_testing":
             return Response(
-                {"status": "Error",
-                 "message": "ML algorithm selection is ambiguous. Please specify algorithm version."},
+                {
+                    "status": "Error",
+                    "message": "ML algorithm selection is ambiguous. Please specify algorithm version.",
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         alg_index = 0
