@@ -25,11 +25,11 @@ try:
     # Random Forest classifier
     rf = RandomForestClassifier()
     # add to ML registry
-    registry.add_algorithm(endpoint_name="income_classifier",
+    registry.add_algorithm(endpoint_name="random_forest_classifier_alg",
                             algorithm_object=rf,
                             algorithm_name="random forest",
                             algorithm_status="production",
-                            algorithm_version="v1",
+                            algorithm_version="v4",
                             algorithm_description="A random forest is a meta estimator that fits a number of decision tree classifiers " \
                                 "on various sub-samples of the dataset and uses averaging to improve the predictive " \
                                 "accuracy and control over-fitting. ",

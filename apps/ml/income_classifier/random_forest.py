@@ -27,8 +27,7 @@ class RandomForestClassifier:
             if i in df_processed.columns:
                 new_dict[i] = df_processed[i].values
             else:
-                new_dict[i]=0
-
+                new_dict[i] = 0
 
         new_df = pd.DataFrame(new_dict)
         return new_df
@@ -38,7 +37,6 @@ class RandomForestClassifier:
         if input_data[1] > 0.5:
             label = "Approved"
         return {"probability": input_data[1], "label": label, "status": "OK"}
-
 
     def compute_prediction(self, input_data):
         try:
