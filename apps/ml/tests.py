@@ -5,6 +5,8 @@ from django.test import TestCase
 from apps.ml.income_classifier.random_forest import RandomForestClassifier
 from apps.ml.income_classifier.extra_trees import ExtraTreesClassifier
 from apps.ml.income_classifier.logistic_regression import LogisticRegressionClassifier
+from apps.ml.income_classifier.naive_bayes import NaiveBayesClassifier
+
 from apps.ml.registry import MLRegistry
 
 
@@ -49,7 +51,6 @@ class MLTests(TestCase):
         self.assertTrue("label" in response)
         self.assertEqual("Approved", response["label"])
 
-
     def test_lr_algorithm(self):
         input_data = {
             "Gender": "Male",
@@ -65,6 +66,26 @@ class MLTests(TestCase):
             "Property_Area": "Urban",
         }
         my_alg = LogisticRegressionClassifier()
+        response = my_alg.compute_prediction(input_data)
+        self.assertEqual("OK", response["status"])
+        self.assertTrue("label" in response)
+        self.assertEqual("Approved", response["label"])
+
+    def test_nb_algorithm(self):
+        input_data = {
+            "Gender": "Male",
+            "Married": "Yes",
+            "Dependents": 2,
+            "Education": "Graduate",
+            "Self_Employed": "Yes",
+            "ApplicantIncome": 5849,
+            "CoapplicantIncome": 6000,
+            "LoanAmount": 120,
+            "Loan_Amount_Term": 360,
+            "Credit_History": 1,
+            "Property_Area": "Urban",
+        }
+        my_alg = NaiveBayesClassifier()
         response = my_alg.compute_prediction(input_data)
         self.assertEqual("OK", response["status"])
         self.assertTrue("label" in response)
