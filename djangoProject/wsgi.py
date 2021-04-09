@@ -10,6 +10,8 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/wsgi/
 import os
 
 from django.core.wsgi import get_wsgi_application
+from apps.ml.income_classifier.extra_trees import ExtraTreesClassifier
+
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djangoProject.settings')
 
@@ -34,6 +36,22 @@ try:
                                 "on various sub-samples of the dataset and uses averaging to improve the predictive " \
                                 "accuracy and control over-fitting. ",
                             algorithm_code=inspect.getsource(RandomForestClassifier))
+
+    # Extra Trees classifier
+    et = ExtraTreesClassifier()
+    # add to ML registry
+    registry.add_algorithm(endpoint_name="income_classifier",
+                           algorithm_object=et,
+                           algorithm_name="extra trees",
+                           algorithm_status="testing",
+                           algorithm_version="0.0.1",
+                           algorithm_description="Extremely Randomized Trees Classifier(Extra Trees Classifier) is a "
+                                                 "type of ensemble learning technique which aggregates the results of "
+                                                 "multiple de-correlated decision trees collected in a “forest” to "
+                                                 "output it’s classification result. In concept, it is very similar "
+                                                 "to a Random Forest Classifier and only differs from it in the "
+                                                 "manner of construction of the decision trees in the forest.",
+                           algorithm_code=inspect.getsource(RandomForestClassifier))
 
 except Exception as e:
     print("Exception while loading the algorithms to the registry,", str(e))
