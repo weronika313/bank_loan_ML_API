@@ -10,8 +10,6 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/wsgi/
 import os
 
 from django.core.wsgi import get_wsgi_application
-from apps.ml.income_classifier.extra_trees import ExtraTreesClassifier
-
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djangoProject.settings')
 
@@ -21,6 +19,10 @@ application = get_wsgi_application()
 import inspect
 from apps.ml.registry import MLRegistry
 from apps.ml.income_classifier.random_forest import RandomForestClassifier
+from apps.ml.income_classifier.extra_trees import ExtraTreesClassifier
+from apps.ml.income_classifier.logistic_regression import LogisticRegressionClassifier
+
+
 
 try:
     registry = MLRegistry() # create ML registry
@@ -52,6 +54,20 @@ try:
                                                  "to a Random Forest Classifier and only differs from it in the "
                                                  "manner of construction of the decision trees in the forest.",
                            algorithm_code=inspect.getsource(RandomForestClassifier))
+
+
+    # Extra Trees classifier
+    lr = LogisticRegressionClassifier()
+    # add to ML registry
+    registry.add_algorithm(endpoint_name="income_classifier",
+                            algorithm_object=lr,
+                            algorithm_name="logistic regression",
+                            algorithm_status="testing",
+                            algorithm_version="0.0.1",
+                            algorithm_description="Logistic Regression is a Machine Learning algorithm which is used "
+                                                  "for the classification problems, it is a predictive analysis "
+                                                  "algorithm and based on the concept of probability.",
+                            algorithm_code=inspect.getsource(RandomForestClassifier))
 
 except Exception as e:
     print("Exception while loading the algorithms to the registry,", str(e))
