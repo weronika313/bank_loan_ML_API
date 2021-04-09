@@ -89,7 +89,7 @@ class MLTests(TestCase):
             "Credit_History": 1,
             "Property_Area": "Urban",
         }
-        my_alg = NaiveBayesClassifier()
+        my_alg = VotingClassifier()
         response = my_alg.compute_prediction(input_data)
         self.assertEqual("OK", response["status"])
         self.assertTrue("label" in response)
