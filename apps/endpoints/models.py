@@ -14,6 +14,9 @@ class MachineLearningAlgorithm(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
     parent_endpoint = models.ForeignKey(Endpoint, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ('name', 'version')
+
 
 class MLAlgorithmStatus(models.Model):
     status = models.CharField(max_length=128)
