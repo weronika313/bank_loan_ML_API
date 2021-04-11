@@ -44,6 +44,9 @@ class ExtraTreesClassifier:
             label = "Approved"
         return {"probability": input_data[1], "label": label, "status": "OK"}
 
+    def get_accuracy(self, x, y):
+        return self.model.score(x, y)
+
     def compute_prediction(self, input_data):
         try:
             input_data = self.preprocessing(input_data)

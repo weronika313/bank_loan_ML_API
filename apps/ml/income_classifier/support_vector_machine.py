@@ -2,17 +2,15 @@ import joblib
 import pandas as pd
 
 
-class NaiveBayesClassifier:
+class SupportVectorMachineClassifier:
     def __init__(self):
-        self.model = joblib.load("research/logistic_regression.joblib")
+        self.model = joblib.load("research/support_vector_machine.joblib")
         self.ohe_col = joblib.load("research/all_columns.joblib")
         self.values_fill_missing = joblib.load("research/train_mode.joblib")
 
     def predict(self, input_data):
+        print(self.model.predict_proba(input_data))
         return self.model.predict_proba(input_data)
-
-    def get_accuracy(self, x, y):
-        return self.model.score(x, y)
 
     def preprocessing(self, input_data):
         input_data = pd.DataFrame(input_data, index=[0])
@@ -50,7 +48,7 @@ class NaiveBayesClassifier:
     def compute_prediction(self, input_data):
         try:
             input_data = self.preprocessing(input_data)
-            prediction = self.predict(input_data)[0]
+            prediction = self.predict(input_data)
             prediction = self.postprocessing(prediction)
         except Exception as e:
             return {"status": "Error", "message": str(e)}

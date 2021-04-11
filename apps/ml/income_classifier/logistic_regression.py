@@ -11,6 +11,9 @@ class LogisticRegressionClassifier:
     def predict(self, input_data):
         return self.model.predict_proba(input_data)
 
+    def get_accuracy(self, x, y):
+        return self.model.score(x, y)
+
     def preprocessing(self, input_data):
         input_data = pd.DataFrame(input_data, index=[0])
         input_data.fillna(self.values_fill_missing)

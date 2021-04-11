@@ -3,6 +3,7 @@ from apps.endpoints.models import Endpoint
 from apps.endpoints.models import MachineLearningAlgorithm
 from apps.endpoints.models import MLAlgorithmStatus
 from apps.endpoints.models import MLRequest
+from apps.endpoints.models import AlgorithmsComparison
 
 
 class EndpointSerializer(serializers.ModelSerializer):
@@ -18,8 +19,8 @@ class MLAlgorithmSerializer(serializers.ModelSerializer):
     def get_current_status(self, algorithm):
         return (
             MLAlgorithmStatus.objects.filter(parent_algorithm=algorithm)
-            .latest("created_at")
-            .status
+                .latest("created_at")
+                .status
         )
 
     class Meta:
@@ -63,4 +64,22 @@ class MLRequestSerializer(serializers.ModelSerializer):
             "feedback",
             "created_at",
             "parent_algorithm",
+        )
+
+
+class AlgorithmComparisonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AlgorithmsComparison
+        read_only_fields = (
+            "id",
+            "created_at",
+            "summary",
+        )
+        fields = (
+            "id",
+            "title",
+            "created_at",
+            "summary",
+            "parent_algorithm_1",
+            "parent_algorithm_2",
         )

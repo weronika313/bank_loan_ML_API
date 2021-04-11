@@ -18,6 +18,9 @@ class VotingClassifier:
 
         return input_data
 
+    def get_accuracy(self, x, y):
+        return self.model.score(x, y)
+
     def ohe_values(self, input_data):
         cat_columns = [
             "Gender",

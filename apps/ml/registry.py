@@ -36,5 +36,4 @@ class MLRegistry:
             )
             status.save()
 
-        # add to registry
         self.endpoints[database_object.id] = algorithm_object

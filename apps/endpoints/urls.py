@@ -7,14 +7,14 @@ from apps.endpoints.views import MLAlgorithmViewSet
 from apps.endpoints.views import MLAlgorithmStatusViewSet
 from apps.endpoints.views import MLRequestViewSet
 from apps.endpoints.views import PredictView
+from apps.endpoints.views import AlgorithmComparisonViewSet
 
 router = DefaultRouter(trailing_slash=False)
-router.register(r"endpoints", EndpointViewSet, basename="endpoints")
 router.register(r"algorithms", MLAlgorithmViewSet, basename="algorithms")
 router.register(
     r"algorithm_statuses", MLAlgorithmStatusViewSet, basename="algorithm_statuses"
 )
-router.register(r"requests", MLRequestViewSet, basename="requests")
+router.register(r"algorithm_comparisons", AlgorithmComparisonViewSet, basename="algorithm_comparisons")
 
 urlpatterns = [
     url(r"^api/v1/", include(router.urls)),

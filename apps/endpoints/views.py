@@ -1,4 +1,4 @@
-from django.db import transaction
+import joblib
 from rest_framework import viewsets
 from rest_framework import mixins
 from rest_framework.exceptions import APIException
@@ -14,6 +14,10 @@ from apps.endpoints.serializers import MLAlgorithmStatusSerializer
 
 from apps.endpoints.models import MLRequest
 from apps.endpoints.serializers import MLRequestSerializer
+
+from django.db import transaction
+from apps.endpoints.models import AlgorithmsComparison
+from apps.endpoints.serializers import AlgorithmComparisonSerializer
 
 import json
 from rest_framework import views, status
@@ -76,7 +80,7 @@ class MLRequestViewSet(
 
 
 class PredictView(views.APIView):
-    def post(self, request, algorithm_name, format=None):
+    def post(self, request, algorithm_name):
 
         algorithm_status = self.request.query_params.get("status", "production")
         algorithm_version = self.request.query_params.get("version")
@@ -123,3 +127,40 @@ class PredictView(views.APIView):
         prediction["request_id"] = ml_request.id
 
         return Response(prediction)
+
+
+class AlgorithmComparisonViewSet(
+    mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet,
+    mixins.CreateModelMixin, mixins.UpdateModelMixin
+):
+    serializer_class = AlgorithmComparisonSerializer
+    queryset = AlgorithmsComparison.objects.all()
+
+    def perform_create(self, serializer):
+        try:
+            alg_1 = MachineLearningAlgorithm.objects.filter(
+                name=serializer.validated_data['parent_algorithm_1'].name,
+                version=serializer.validated_data['parent_algorithm_1'].version,
+                status__active=True,
+            )
+
+            alg_2 = MachineLearningAlgorithm.objects.filter(
+                name=serializer.validated_data['parent_algorithm_2'].name,
+                version=serializer.validated_data['parent_algorithm_2'].version,
+                status__active=True,
+            )
+            algorithm_object_1 = registry.endpoints[alg_1[0].id]
+            algorithm_object_2 = registry.endpoints[alg_2[0].id]
+
+            x_test = joblib.load("research/X_test.joblib")
+            y_test = joblib.load("research/y_test.joblib")
+
+            accuracy_1 = algorithm_object_1.get_accuracy(x_test, y_test)
+            accuracy_2 = algorithm_object_2.get_accuracy(x_test, y_test)
+
+
+            summary = "Algorithm #1 accuracy: {}, Algorithm #2 accuracy: {}".format(accuracy_1, accuracy_2)
+            serializer.save(summary=summary)
+
+        except Exception as e:
+            raise APIException(str(e))
