@@ -24,6 +24,8 @@ from rest_framework import views, status
 from rest_framework.response import Response
 from djangoProject.wsgi import registry
 
+from rest_framework.permissions import IsAuthenticated
+
 
 class EndpointViewSet(
     mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
@@ -56,6 +58,7 @@ class MLAlgorithmStatusViewSet(
     viewsets.GenericViewSet,
     mixins.CreateModelMixin,
 ):
+
     serializer_class = MLAlgorithmStatusSerializer
     queryset = MLAlgorithmStatus.objects.all()
 
@@ -80,6 +83,8 @@ class MLRequestViewSet(
 
 
 class PredictView(views.APIView):
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request, algorithm_name):
 
         algorithm_status = self.request.query_params.get("status", "production")
@@ -133,6 +138,7 @@ class AlgorithmComparisonViewSet(
     mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet,
     mixins.CreateModelMixin, mixins.UpdateModelMixin
 ):
+    permission_classes = (IsAuthenticated,)
     serializer_class = AlgorithmComparisonSerializer
     queryset = AlgorithmsComparison.objects.all()
 
