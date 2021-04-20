@@ -2,6 +2,7 @@
 from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
 
+from apps import users
 from apps.endpoints.views import MLAlgorithmViewSet
 from apps.endpoints.views import MLAlgorithmStatusViewSet
 from apps.endpoints.views import PredictView
@@ -16,9 +17,11 @@ router.register(
 router.register(r"algorithm_comparisons", AlgorithmComparisonViewSet, basename="algorithm_comparisons")
 
 urlpatterns = [
-    url(r"^api/v1/", include(router.urls)),
+    url(r"^", include(router.urls)),
     url(
-        r"^api/v1/(?P<algorithm_name>.+)/predict$", PredictView.as_view(), name="predict"
+        r"^(?P<algorithm_name>.+)/predict$", PredictView.as_view(), name="predict"
     ),
-    url('api-token-auth/', obtain_auth_token, name='api_token_auth')
+    url(r"^users/", include('apps.users.urls')),
+    url(r"^rest-auth/", include('rest_auth.urls')),
+    url(r"^rest-auth/registration/", include('rest_auth.registration.urls'))
 ]

@@ -24,12 +24,13 @@ from rest_framework import views, status
 from rest_framework.response import Response
 from djangoProject.wsgi import registry
 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 
 
 class EndpointViewSet(
     mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
 ):
+    permission_classes = (AllowAny,)
     serializer_class = EndpointSerializer
     queryset = Endpoint.objects.all()
 
@@ -37,6 +38,7 @@ class EndpointViewSet(
 class MLAlgorithmViewSet(
     mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
 ):
+    permission_classes = (AllowAny,)
     serializer_class = MLAlgorithmSerializer
     queryset = MachineLearningAlgorithm.objects.all()
 
@@ -58,7 +60,7 @@ class MLAlgorithmStatusViewSet(
     viewsets.GenericViewSet,
     mixins.CreateModelMixin,
 ):
-
+    permission_classes = (AllowAny,)
     serializer_class = MLAlgorithmStatusSerializer
     queryset = MLAlgorithmStatus.objects.all()
 
@@ -78,6 +80,7 @@ class MLRequestViewSet(
     viewsets.GenericViewSet,
     mixins.UpdateModelMixin,
 ):
+    permission_classes = (AllowAny,)
     serializer_class = MLRequestSerializer
     queryset = MLRequest.objects.all()
 
@@ -138,7 +141,7 @@ class AlgorithmComparisonViewSet(
     mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet,
     mixins.CreateModelMixin, mixins.UpdateModelMixin
 ):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     serializer_class = AlgorithmComparisonSerializer
     queryset = AlgorithmsComparison.objects.all()
 
