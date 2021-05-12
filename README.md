@@ -33,11 +33,6 @@ Stop then remove the running container once done:
 
 
 
-## Demployment
-
-https://bank-loan-api.herokuapp.com/api/v1/
-
-
 
 
 
